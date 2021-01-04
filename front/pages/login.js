@@ -1,10 +1,12 @@
+import React from 'react';
+import AppLayout from '../components/AppLayout';
 
 const Login = () => {
-    return( 
+    return (
         <div>
-            내 로그인 페이지
+            <AppLayout>로그인페이지</AppLayout>
         </div>
-    )
-}
+    );
+};
 
 export default Login;

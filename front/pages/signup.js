@@ -1,10 +1,12 @@
+import React from 'react';
+import AppLayout from '../components/AppLayout';
 
 const Signup = () => {
-    return( 
+    return (
         <div>
-            내 회원가입 페이지
+            <AppLayout>회원가입 페이지</AppLayout>
         </div>
-    )
-}
+    );
+};
 
 export default Signup;
