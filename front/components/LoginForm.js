@@ -1,17 +1,23 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import AppLayout from '../components/AppLayout';
+import styled from '@emotion/styled';
+import PropTypes from 'prop-types';
 
-const Login = () => {
+const LoginButton = styled.div`
+    margin-top: 10px;
+`;
+
+const LoginForm = ({ setIsLoggedIn }) => {
     const { register, watch, errors, handleSubmit } = useForm();
     console.log(`${watch('email')}`);
 
     const onSubmit = (data) => {
         console.log('data', data);
+        setIsLoggedIn(true);
     };
 
     return (
-        <AppLayout>
+        <>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <label>Email</label><br />
@@ -31,10 +37,16 @@ const Login = () => {
                     /><br />
                     {errors.email && <p>this email field is required</p>}
                 </div>
-                <button type="submit">로그인</button>
+                <LoginButton>
+                    <button type="submit">로그인</button>
+                </LoginButton>
             </form>
-        </AppLayout>
+        </>
     );
 };
 
-export default Login;
+LoginForm.propTypes = {
+    setIsLoggedIn: PropTypes.func.isRequired,
+};
+
+export default LoginForm;

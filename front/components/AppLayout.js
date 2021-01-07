@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
-import { Menu, Row, Col, Input, Button } from 'antd';
+import { Menu, Row, Col, Input } from 'antd';
 import styled from '@emotion/styled';
 import Produce from './Produce';
+import LoginForm from './LoginForm';
+import UserProfile from './UserProfile';
 
 const SearchInput = styled(Input.Search)`
     vertical-align: middle;
-`;
-const Pageheader = styled.div`
-
 `;
 
 const AppLayout = ({ children }) => {
@@ -24,9 +23,6 @@ const AppLayout = ({ children }) => {
             <Menu mode="horizontal">
                 <Menu.Item><Link href="/"><a>ballde</a></Link></Menu.Item>
                 <Menu.Item>
-                    <Link href="/profile"><a>프로필</a></Link>
-                </Menu.Item>
-                <Menu.Item>
                     <Link href="/blog"><a>블로그</a></Link>
                 </Menu.Item>
                 <Menu.Item>
@@ -35,31 +31,27 @@ const AppLayout = ({ children }) => {
                 <Menu.Item>
                     <SearchInput enterButton />
                 </Menu.Item>
-                {isLoggedIn ? (
-                    <Menu.Item>
-                        <Button>로그아웃</Button>
-                    </Menu.Item>
-                ) : (
-                    <Menu.Item>
-                        <Link href="/login"><a>로그인</a></Link>
-                    </Menu.Item>
-                )}
                 {isLoggedIn ? null : (
                     <Menu.Item>
                         <Link href="/signup"><a>회원가입</a></Link>
                     </Menu.Item>
                 )}
             </Menu>
-            <Pageheader>
+            <div id="ImageHeader">
                 <Row>
                     <Col>
-                        <h1>여기다가 사진넣기</h1>
+                        <h1>Ballde Blog</h1>
                     </Col>
                 </Row>
-            </Pageheader>
+            </div>
             <Row gutter={8}>
-                <Col xs={24} md={4}><Produce /></Col>
-                <Col xs={24} md={20}>{children}</Col>
+                <Col xs={24} md={6}><Produce /></Col>
+                <Col xs={24} md={12}>{children}</Col>
+                <Col xs={24} md={6}>
+                    {isLoggedIn
+                        ? <UserProfile setIsLoggedIn={setIsLoggedIn} />
+                        : <LoginForm setIsLoggedIn={setIsLoggedIn} />}
+                </Col>
             </Row>
             <Row>
                 <Col>

@@ -6,7 +6,7 @@ const Home = () => {
         <div>
             <AppLayout>
                 <div>
-                    Home
+                    기술스택 소개합니다.
                 </div>
             </AppLayout>
         </div>

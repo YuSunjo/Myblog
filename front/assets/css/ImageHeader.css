@@ -1,0 +1,12 @@
+#ImageHeader{
+    background-image: url('../image/background.jpg');
+    /* background-position: 0% 60%; */
+    height: 150px;
+    color: #ffffff;
+    border-bottom: 1px #eee solid;
+    padding-top: 60px;
+}
+
+#ImageHeader h1 {
+    color: #EAEAEA;
+}
