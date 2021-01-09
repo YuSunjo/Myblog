@@ -36,6 +36,9 @@ const AppLayout = ({ children }) => {
                         <Link href="/signup"><a>회원가입</a></Link>
                     </Menu.Item>
                 )}
+                <Menu.Item>
+                    <Link href="/profile"><a>내 정보</a></Link>
+                </Menu.Item>
             </Menu>
             <div id="ImageHeader">
                 <Row>

@@ -8,6 +8,7 @@ const UserProfile = ({ setIsLoggedIn }) => {
     }, []);
     return (
         <Card
+        // Link
             actions={[<div key="like">좋아요한 게시글</div>]}
         >
             <Card.Meta
