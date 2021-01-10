@@ -1,19 +1,21 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
-import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { loginAction } from '../reducers';
 
 const LoginButton = styled.div`
     margin-top: 10px;
 `;
 
-const LoginForm = ({ setIsLoggedIn }) => {
+const LoginForm = () => {
+    const dispatch = useDispatch();
     const { register, watch, errors, handleSubmit } = useForm();
     console.log(`${watch('email')}`);
 
     const onSubmit = (data) => {
         console.log('data', data);
-        setIsLoggedIn(true);
+        dispatch(loginAction({ data }));
     };
 
     return (
@@ -43,10 +45,6 @@ const LoginForm = ({ setIsLoggedIn }) => {
             </form>
         </>
     );
-};
-
-LoginForm.propTypes = {
-    setIsLoggedIn: PropTypes.func.isRequired,
 };
 
 export default LoginForm;

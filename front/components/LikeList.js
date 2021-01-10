@@ -29,7 +29,7 @@ const LikeList = ({ header, data }) => {
 };
 
 LikeList.prototype = {
-    header: PropTypes.toString.isRequired,
+    header: PropTypes.string.isRequired,
     data: PropTypes.array.isRequired,
 };
 

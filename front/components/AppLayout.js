@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Menu, Row, Col, Input } from 'antd';
 import styled from '@emotion/styled';
+import { useSelector } from 'react-redux';
 import Produce from './Produce';
 import LoginForm from './LoginForm';
 import UserProfile from './UserProfile';
@@ -12,7 +13,7 @@ const SearchInput = styled(Input.Search)`
 `;
 
 const AppLayout = ({ children }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const isLoggedIn = useSelector((state) => { return state.user.isLoggedIn; });
     const thisYear = () => {
         const year = new Date().getFullYear();
         return year;
@@ -36,9 +37,12 @@ const AppLayout = ({ children }) => {
                         <Link href="/signup"><a>회원가입</a></Link>
                     </Menu.Item>
                 )}
-                <Menu.Item>
-                    <Link href="/profile"><a>내 정보</a></Link>
-                </Menu.Item>
+                {isLoggedIn ? (
+                    <Menu.Item>
+                        <Link href="/profile"><a>내 정보</a></Link>
+                    </Menu.Item>
+                )
+                    : null}
             </Menu>
             <div id="ImageHeader">
                 <Row>
@@ -52,8 +56,8 @@ const AppLayout = ({ children }) => {
                 <Col xs={24} md={12}>{children}</Col>
                 <Col xs={24} md={6}>
                     {isLoggedIn
-                        ? <UserProfile setIsLoggedIn={setIsLoggedIn} />
-                        : <LoginForm setIsLoggedIn={setIsLoggedIn} />}
+                        ? <UserProfile />
+                        : <LoginForm />}
                 </Col>
             </Row>
             <Row>
