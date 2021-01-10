@@ -6,7 +6,7 @@ import { logoutAction } from '../reducers';
 const UserProfile = () => {
     const dispatch = useDispatch();
     const onLogOut = useCallback(() => {
-        dispatch(logoutAction);
+        dispatch(logoutAction());
     }, []);
     return (
         <Card
