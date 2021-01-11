@@ -1,10 +1,10 @@
-import { Card, Popover, Button } from 'antd';
+import { Card, Popover, Button, List, Comment } from 'antd';
 import React, { useState, useCallback } from 'react';
 import { RetweetOutlined, HeartOutlined, MessageOutlined, EllipsisOutlined, HeartTwoTone } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 
 // post가 온다.  나중에 여기 동적 라우터로 받아준다.
-//나중에 이부분을 이용할거 ... 
+// 나중에 이부분을 이용할거 ...
 const PostCardDetail = ({ post }) => {
     const id = useSelector((state) => { return state.user; });
     const [liked, setLiked] = useState(false);
@@ -48,7 +48,23 @@ const PostCardDetail = ({ post }) => {
             {commentFormOpened
             && (
                 <div>
-                    댓글 부분
+                    <CommentForm post={post} />
+                    <List
+                        header={`${post.Comments.length}개의 댓글`}
+                        itemLayout="horizontal"
+                        dataSource={post.Comments}
+                        renderItem={(item) => {
+                            return (
+                                <li>
+                                    <Comment
+                                        author={item.User.nickname}
+                                        avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+                                        content={item.content}
+                                    />
+                                </li>
+                            );
+                        }}
+                    />
                 </div>
             )}
 
