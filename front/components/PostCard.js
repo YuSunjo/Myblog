@@ -1,11 +1,19 @@
-import React from 'react'
+import { Card } from 'antd';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const PostCard = () => {
+const PostCard = ({ post }) => {
     return (
         <div>
-            postCard
+            <Card type="inner" title={post.title} extra={<a href="#">More</a>}>
+                {post.title}
+            </Card>
         </div>
     );
+};
+
+PostCard.propTypes = {
+    post: PropTypes.object.isRequired,
 };
 
 export default PostCard;

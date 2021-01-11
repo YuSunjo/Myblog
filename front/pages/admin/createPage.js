@@ -7,15 +7,20 @@ import AppLayout from '../../components/AppLayout';
 const CreatePage = () => {
     const { imagePaths } = useSelector((state) => { return state.post; });
     const dispatch = useDispatch();
+    const [title, setTitle] = useState('');
     const [text, setText] = useState('');
     const imageInput = useRef();
 
     const onChangeText = useCallback((e) => {
         setText(e.target.value);
     }, []);
+    const onChangeTitle = useCallback((e) => {
+        setTitle(e.target.value);
+    });
     const onSubmit = useCallback(() => {
         dispatch(addPost);
         setText('');
+        setTitle('');
     }, []);
 
     const onClickImageUpload = useCallback(() => {
@@ -24,6 +29,8 @@ const CreatePage = () => {
     return (
         <AppLayout>
             <Form style={{ margin: '10px 0 20px' }} encType="multipart/form-data" onFinish={onSubmit}>
+                <span>title</span>
+                <Input type="text" value={title} onChange={onChangeTitle} placeholder="title" />
                 <Input.TextArea
                     value={text}
                     onChange={onChangeText}
