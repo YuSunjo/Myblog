@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
 import { useDispatch } from 'react-redux';
-import { loginAction } from '../reducers/user';
+import { loginRequestAction } from '../reducers/user';
 
 const LoginButton = styled.div`
     margin-top: 10px;
@@ -15,7 +15,7 @@ const LoginForm = () => {
 
     const onSubmit = (data) => {
         console.log('data', data);
-        dispatch(loginAction({ data }));
+        dispatch(loginRequestAction({ data }));
     };
 
     return (
