@@ -1,11 +1,11 @@
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { Button, Form, Input } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { addPost } from '../../reducers/post';
 import AppLayout from '../../components/AppLayout';
 
 const CreatePage = () => {
-    const { imagePaths } = useSelector((state) => { return state.post; });
+    const { imagePaths, addPostDone } = useSelector((state) => { return state.post; });
     const dispatch = useDispatch();
     const [title, setTitle] = useState('');
     const [text, setText] = useState('');
@@ -18,10 +18,17 @@ const CreatePage = () => {
         setTitle(e.target.value);
     });
     const onSubmit = useCallback(() => {
-        dispatch(addPost);
+        dispatch(addPost(text));
         setText('');
         setTitle('');
     }, []);
+
+    useEffect(() => {
+        if (addPostDone) {
+            setText('');
+            setTitle('');
+        }
+    }, [addPostDone]);
 
     const onClickImageUpload = useCallback(() => {
         imageInput.current.click();

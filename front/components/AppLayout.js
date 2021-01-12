@@ -13,7 +13,7 @@ const SearchInput = styled(Input.Search)`
 `;
 
 const AppLayout = ({ children }) => {
-    const isLoggedIn = useSelector((state) => { return state.user.isLoggedIn; });
+    const { me } = useSelector((state) => { return state.user; });
     const thisYear = () => {
         const year = new Date().getFullYear();
         return year;
@@ -32,12 +32,12 @@ const AppLayout = ({ children }) => {
                 <Menu.Item>
                     <SearchInput enterButton />
                 </Menu.Item>
-                {isLoggedIn ? null : (
+                {me ? null : (
                     <Menu.Item>
                         <Link href="/signup"><a>회원가입</a></Link>
                     </Menu.Item>
                 )}
-                {isLoggedIn ? (
+                {me ? (
                     <Menu.Item>
                         <Link href="/profile"><a>내 정보</a></Link>
                     </Menu.Item>
@@ -55,7 +55,7 @@ const AppLayout = ({ children }) => {
                 <Col xs={24} md={6}><Produce /></Col>
                 <Col xs={24} md={12}>{children}</Col>
                 <Col xs={24} md={6}>
-                    {isLoggedIn
+                    {me
                         ? <UserProfile />
                         : <LoginForm />}
                 </Col>
