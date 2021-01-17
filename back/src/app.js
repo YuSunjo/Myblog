@@ -1,9 +1,13 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import bodyParser from 'body-parser';
 dotenv.config();
 import router from './routes/index';
 import db from '@src/models';
+import cors from 'cors';
+import passportConfig from '@src/passport/index';
+import cookieParser from 'cookie-parser';
+import session from 'express-session';
+import passport from 'passport';
 // const db = require('@src/models');
 
 class App {
@@ -42,8 +46,25 @@ class App {
   }
 
   setMiddleWare() {
-    this.app.use(bodyParser.json());
-    this.app.use(bodyParser.urlencoded({ extended: false }));
+    passportConfig();
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(
+      cors({
+        origin: 'http://localhost:3000',
+        credentials: true,
+      })
+    );
+    this.app.use(cookieParser(process.env.COOKIE_SECRET));
+    this.app.use(
+      session({
+        saveUninitialized: false,
+        resave: false,
+        secret: process.env.COOKIE_SECRET,
+      })
+    );
+    this.app.use(passport.initialize());
+    this.app.use(passport.session());
   }
 
   setStatic() {

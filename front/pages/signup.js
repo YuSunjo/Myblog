@@ -1,16 +1,46 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSelector, useDispatch } from 'react-redux';
+import Router from 'next/router';
+import { Button } from 'antd';
 import AppLayout from '../components/AppLayout';
+import { SIGN_UP_REQUEST } from '../reducers/user';
 
 const Signup = () => {
+    const dispatch = useDispatch();
+    const { me, signUpLoading, signUpDone, signUpError } = useSelector(
+        (state) => { return state.user; },
+    );
     const { register, watch, handleSubmit, errors } = useForm();
     console.log(watch('email'));
 
     const password = useRef();
     password.current = watch('password');
 
+    useEffect(() => {
+        if (me && me.id) {
+            Router.replace('/');
+        }
+    }, [me && me.id]);
+
+    useEffect(() => {
+        if (signUpDone) {
+            Router.replace('/');
+        }
+    }, [signUpDone]);
+
+    useEffect(() => {
+        if (signUpError) {
+            alert(signUpError);
+        }
+    }, [signUpError]);
+
     const onSubmit = (data) => {
         console.log('data', data);
+        dispatch({
+            type: SIGN_UP_REQUEST,
+            data,
+        });
     };
 
     return (
@@ -62,7 +92,7 @@ const Signup = () => {
                     {errors.password_confirm && errors.password_confirm.type === 'validate'
                         && <p>the passwords do not match </p>}
                 </div>
-                <button type="submit">submit</button>
+                <Button type="submit" loading={signUpLoading}>submit</Button>
             </form>
         </AppLayout>
     );

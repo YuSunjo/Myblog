@@ -28,15 +28,6 @@ export const SIGN_UP_REQUEST = 'SIGN_UP_REQUEST';
 export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
 export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE';
 
-const dummyUser = (data) => {
-    return {
-        ...data,
-        nickname: 'sunjo',
-        id: 2,
-        comment: [],
-    };
-};
-
 export const loginRequestAction = (data) => {
     return {
         type: LOG_IN_REQUEST,
@@ -63,7 +54,7 @@ const reducer = (state = initialState, action) => {
             ...state,
             logInLoading: false,
             logInDone: true,
-            me: dummyUser(action.data),
+            me: action.data,
         };
     case LOG_IN_FAILURE:
         return {

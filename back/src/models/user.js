@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 
-export default class Comment extends Model {
+export default class User extends Model {
   static init(sequelize) {
     return super.init(
       {
@@ -16,6 +16,10 @@ export default class Comment extends Model {
         password: {
           type: DataTypes.STRING(100),
           allowNull: false,
+        },
+        role: {
+          type: DataTypes.ENUM(['User', 'admin']),
+          default: 'User',
         },
       },
       {
