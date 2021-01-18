@@ -1,12 +1,9 @@
 import {
   signupService,
   exUserFind,
-  // login_userService,
+  login_userService,
 } from '@src/service/user/userService';
 import bcrypt from 'bcrypt';
-import User from '@src/models/user';
-import Post from '@src/models/post';
-import passport from 'passport';
 
 export const post_userController = async (req, res, next) => {
   const { email, nickname, password } = req.body;
@@ -25,29 +22,7 @@ export const post_userController = async (req, res, next) => {
 };
 
 export const loginController = (req, res, next) => {
-  // login_userService(req, res, next);
-  passport.authenticate('local', (err, user, info) => {
-    if (err) {
-      console.error(err);
-      return next(err);
-    }
-    if (info) {
-      return res.status(401).send(info.reason);
-    }
-    return req.login(user, async (loginErr) => {
-      if (loginErr) {
-        console.error(loginErr);
-        return next(loginErr);
-      }
-      const fullUserWithoutPassword = await User.findOne({
-        where: { id: user.id },
-        attributes: {
-          exclude: ['password'],
-        },
-      });
-      return res.status(200).json(fullUserWithoutPassword);
-    });
-  })(req, res, next);
+  login_userService(req, res, next);
 };
 
 export const logoutController = (req, res) => {

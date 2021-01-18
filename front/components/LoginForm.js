@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginRequestAction } from '../reducers/user';
 
 const LoginButton = styled.div`
@@ -10,13 +10,20 @@ const LoginButton = styled.div`
 
 const LoginForm = () => {
     const dispatch = useDispatch();
+    const { loginLoading, logInError } = useSelector((state) => { return state.user; });
     const { register, watch, errors, handleSubmit } = useForm();
     console.log(`${watch('email')}`);
 
-    const onSubmit = (data) => {
+    useEffect(() => {
+        if (logInError) {
+            alert(logInError);
+        }
+    }, [logInError]);
+
+    const onSubmit = useCallback((data) => {
         console.log('data', data);
-        dispatch(loginRequestAction({ data }));
-    };
+        dispatch(loginRequestAction(data));
+    }, []);
 
     return (
         <>
@@ -40,7 +47,7 @@ const LoginForm = () => {
                     {errors.email && <p>this email field is required</p>}
                 </div>
                 <LoginButton>
-                    <button type="submit">로그인</button>
+                    <button type="submit" loading={loginLoading}>로그인</button>
                 </LoginButton>
             </form>
         </>

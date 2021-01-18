@@ -1,7 +1,8 @@
+import User from '@src/models/user';
 import {
   saveUser,
   exUserRepository,
-  findOneUser,
+  // findOneUser,
 } from '@src/repository/userRepository';
 import passport from 'passport';
 
@@ -15,6 +16,7 @@ export const exUserFind = (email) => {
 };
 
 export const login_userService = (req, res, next) => {
+  console.log(req.body);
   passport.authenticate('local', (err, user, info) => {
     if (err) {
       console.error(err);
@@ -24,11 +26,18 @@ export const login_userService = (req, res, next) => {
       return res.status(403).send(info.reason);
     }
     return req.login(user, async (loginErr) => {
+      console.log('user', user);
       if (loginErr) {
         console.error(loginErr);
         return next(loginErr);
       }
-      const fullUserWithoutPassword = findOneUser(user);
+      // const fullUserWithoutPassword = findOneUser(user);
+      const fullUserWithoutPassword = await User.findOne({
+        where: { id: user.id },
+        attributes: {
+          exclude: ['password'],
+        },
+      });
       return res.status(200).json(fullUserWithoutPassword);
     });
   })(req, res, next);

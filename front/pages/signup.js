@@ -2,13 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import Router from 'next/router';
-import { Button } from 'antd';
 import AppLayout from '../components/AppLayout';
 import { SIGN_UP_REQUEST } from '../reducers/user';
 
 const Signup = () => {
     const dispatch = useDispatch();
-    const { me, signUpLoading, signUpDone, signUpError } = useSelector(
+    const { me, signUpDone, signUpError } = useSelector(
         (state) => { return state.user; },
     );
     const { register, watch, handleSubmit, errors } = useForm();
@@ -92,7 +91,7 @@ const Signup = () => {
                     {errors.password_confirm && errors.password_confirm.type === 'validate'
                         && <p>the passwords do not match </p>}
                 </div>
-                <Button type="submit" loading={signUpLoading}>submit</Button>
+                <button type="submit">submit</button>
             </form>
         </AppLayout>
     );
