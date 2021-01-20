@@ -4,6 +4,10 @@ export default class Post extends Model {
   static init(sequelize) {
     return super.init(
       {
+        title: {
+          type: DataTypes.TEXT,
+          allowNull: false,
+        },
         content: {
           type: DataTypes.TEXT,
           allowNull: false,
@@ -26,6 +30,5 @@ export default class Post extends Model {
     db.Post.hasMany(db.Comment);
     db.Post.hasMany(db.Image);
     db.Post.belongsToMany(db.User, { through: 'Like', as: 'Likers' });
-    db.Post.belongsTo(db.Post, { as: 'Retweet' });
   }
 }

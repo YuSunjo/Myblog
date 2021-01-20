@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, Col, Row, Button } from 'antd';
 import styled from '@emotion/styled';
+import { useDispatch } from 'react-redux';
 import AppLayout from '../components/AppLayout';
+
+import { LOAD_USER_REQUEST } from '../reducers/user';
 
 const Skill = styled.h2`
     margin: 0 auto;
@@ -13,6 +16,13 @@ const P = styled.p`
 `;
 
 const Home = () => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch({
+            type: LOAD_USER_REQUEST,
+        });
+    }, []);
     return (
         <div>
             <AppLayout>
