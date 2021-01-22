@@ -1,32 +1,22 @@
+import produce from 'immer';
+
 export const initialState = {
-    mainPosts: [{
-        id: 1,
-        title: 'title입니다.',
-        content: 'tnswh',
-        Images: [{
-            src: 'https://www.google.com/imgres?imgurl=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F2207573D58CFDE2704&imgrefurl=https%3A%2F%2Fjungjeok.tistory.com%2F137&tbnid=_nfOHvvh-YIzCM&vet=12ahUKEwjZ2OvoltztAhWMAJQKHW_PAkwQMygCegUIARDeAQ..i&docid=7AcBUaEcAJRN3M&w=800&h=400&q=%EB%9D%BC%EC%9D%B4%EC%96%B8&ved=2ahUKEwjZ2OvoltztAhWMAJQKHW_PAkwQMygCegUIARDeAQ',
-        }, {
-            src: 'https://www.google.com/imgres?imgurl=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F2207573D58CFDE2704&imgrefurl=https%3A%2F%2Fjungjeok.tistory.com%2F137&tbnid=_nfOHvvh-YIzCM&vet=12ahUKEwjZ2OvoltztAhWMAJQKHW_PAkwQMygCegUIARDeAQ..i&docid=7AcBUaEcAJRN3M&w=800&h=400&q=%EB%9D%BC%EC%9D%B4%EC%96%B8&ved=2ahUKEwjZ2OvoltztAhWMAJQKHW_PAkwQMygCegUIARDeAQ',
-        }, {
-            src: 'https://www.google.com/imgres?imgurl=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F2207573D58CFDE2704&imgrefurl=https%3A%2F%2Fjungjeok.tistory.com%2F137&tbnid=_nfOHvvh-YIzCM&vet=12ahUKEwjZ2OvoltztAhWMAJQKHW_PAkwQMygCegUIARDeAQ..i&docid=7AcBUaEcAJRN3M&w=800&h=400&q=%EB%9D%BC%EC%9D%B4%EC%96%B8&ved=2ahUKEwjZ2OvoltztAhWMAJQKHW_PAkwQMygCegUIARDeAQ',
-        }],
-        Comments: [{
-            User: {
-                nickname: 'nero',
-            },
-            content: '우와!!!',
-        }, {
-            User: {
-                nickname: 'hero',
-            },
-            constent: '오오오오',
-        }],
-    }],
+    mainPosts: [],
     imagePaths: [],
+    hasMorePosts: true,
+
     addPostLoading: false,
     addPostDone: false,
     addPostError: null,
+
+    loadPostsLoading: false,
+    loadPostsDone: false,
+    loadPostsError: null,
 };
+
+export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
+export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
+export const LOAD_POSTS_FAILURE = 'LOAD_POSTS_FAILURE';
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
@@ -43,43 +33,41 @@ export const addPost = (data) => {
     };
 };
 
-const dummyPost = {
-    id: 2,
-    title: 'title입니다.',
-    content: 'dummy data',
-    User: {
-        id: 1,
-        nickname: 'tnswh',
-    },
-    Images: [],
-    Comments: [],
-};
-
 const reducer = (state = initialState, action) => {
-    switch (action.type) {
-    case ADD_POST_REQUEST:
-        return {
-            ...state,
-            addPostLoading: true,
-            addPostDone: false,
-            addPostError: null,
-        };
-    case ADD_POST_SUCCESS:
-        return {
-            ...state,
-            mainPosts: [dummyPost, ...state.mainPosts],
-            addPostLoading: false,
-            addPostDone: true,
-        };
-    case ADD_POST_FAILURE:
-        return {
-            ...state,
-            addPostLoading: false,
-            addPostError: action.error,
-        };
-    default:
-        return state;
-    }
+    return produce(state, (draft) => {
+        switch (action.type) {
+        case LOAD_POSTS_REQUEST:
+            draft.loadPostsLoading = true;
+            draft.loadPostsDone = false;
+            draft.loadPostsError = null;
+            break;
+        case LOAD_POSTS_SUCCESS:
+            draft.mainPosts = draft.mainPosts.concat(action.data);
+            draft.loadPostsLoading = false;
+            draft.loadPostsDone = true;
+            break;
+        case LOAD_POSTS_FAILURE:
+            draft.loadPostsLoading = false;
+            draft.loadPostsError = action.error;
+            break;
+        case ADD_POST_REQUEST:
+            draft.addPostLoading = true;
+            draft.addPostDone = false;
+            draft.addPostError = null;
+            break;
+        case ADD_POST_SUCCESS:
+            draft.mainPosts.unshift(action.data);
+            draft.addPostLoading = false;
+            draft.addPostDone = true;
+            break;
+        case ADD_POST_FAILURE:
+            draft.addPostLoading = false;
+            draft.addPostError = action.error;
+            break;
+        default:
+            break;
+        }
+    });
 };
 
 export default reducer;
