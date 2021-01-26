@@ -8,6 +8,7 @@ import passportConfig from '@src/passport/index';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import passport from 'passport';
+import morgan from 'morgan';
 // const db = require('@src/models');
 
 class App {
@@ -65,6 +66,7 @@ class App {
     );
     this.app.use(passport.initialize());
     this.app.use(passport.session());
+    this.app.use(morgan('dev'));
   }
 
   setStatic() {

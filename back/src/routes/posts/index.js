@@ -3,7 +3,6 @@ import express from 'express';
 const router = express.Router();
 import Post from '@src/models/post';
 import Image from '@src/models/image';
-import Comment from '@src/models/comment';
 import User from '@src/models/user';
 
 // router.get('/', (req, res) => {
