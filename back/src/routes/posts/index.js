@@ -3,6 +3,8 @@ import express from 'express';
 const router = express.Router();
 import Post from '@src/models/post';
 import Image from '@src/models/image';
+import Comment from '@src/models/comment';
+import User from '@src/models/user';
 
 // router.get('/', (req, res) => {
 //   res.send('post page');
@@ -12,11 +14,15 @@ import Image from '@src/models/image';
 router.get('/', async (req, res, next) => {
   try {
     const posts = await Post.findAll({
-      where: { role: 'admin' },
+      // where: { role: 'admin' },
       limit: 10,
+      order: [['createdAt', 'DESC']],
       include: [
         {
           model: Image,
+        },
+        {
+          model: User,
         },
       ],
     });

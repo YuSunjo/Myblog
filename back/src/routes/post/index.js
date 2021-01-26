@@ -6,33 +6,15 @@ import Post from '@src/models/post';
 import Image from '@src/models/image';
 import Hashtag from '@src/models/hashtag';
 import User from '@src/models/user';
+import { isLoggedIn } from '@src/middlewares/user';
 
-router.post('/', async (req, res, next) => {
+router.post('/', isLoggedIn, async (req, res, next) => {
   try {
-    // const hashtags = req.body.content.match(/(#[^\s#]+)/g);
     const post = await Post.create({
       title: req.body.title,
       content: req.body.content,
       UserId: req.user.id,
     });
-    if (hashtags) {
-      const result = await Promise.all(
-        hashtags.map((tag) =>
-          Hashtag.findOrCreate({
-            where: { name: tag.slice(1).toLowerCase() },
-          })
-        )
-      );
-      await post.addHashtags(result.map((v) => v[0]));
-    }
-    if (req.body.image) {
-      if (Array.isArray(req.body.image)) {
-        const images = await Promise.all(
-          req.body.image.map((image) => Image.create({ src: image }))
-        );
-        await post.addImages(images);
-      }
-    }
     const fullPost = await Post.findOne({
       where: { id: post.id },
       include: [
@@ -41,21 +23,30 @@ router.post('/', async (req, res, next) => {
         },
         {
           model: Comment,
-          include: [
-            {
-              model: User,
-              attributes: ['id', 'nickname'],
-            },
-          ],
-        },
-        {
-          model: User,
-          as: 'Likers',
-          attributes: ['id'],
         },
       ],
     });
     res.status(201).json(fullPost);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.post('/:postId/comment', isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await Post.findOne({
+      where: { id: req.params.postId },
+    });
+    if (!post) {
+      return res.status(403).send('존재하지 않는 게시글입니다.');
+    }
+    const comment = await Comment.create({
+      content: req.body.content,
+      PostId: req.params.postId,
+      UserId: req.user.id,
+    });
+    res.status(201).json(comment);
   } catch (error) {
     console.error(error);
     next(error);
