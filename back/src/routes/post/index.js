@@ -4,8 +4,6 @@ import express from 'express';
 const router = express.Router();
 import Post from '@src/models/post';
 import Image from '@src/models/image';
-import Hashtag from '@src/models/hashtag';
-import User from '@src/models/user';
 import { isLoggedIn } from '@src/middlewares/user';
 
 router.post('/', isLoggedIn, async (req, res, next) => {
@@ -27,6 +25,24 @@ router.post('/', isLoggedIn, async (req, res, next) => {
       ],
     });
     res.status(201).json(fullPost);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.get('/:postId', async (req, res, next) => {
+  try {
+    const post = await Post.findOne({
+      where: { id: req.params.postId },
+    });
+    if (!post) {
+      return res.status(404).send('존재하지 않는 게시글 입니다.');
+    }
+    const fullPost = await Post.findOne({
+      where: { id: post.id }, //include 나중에 넣어야할듯?
+    });
+    res.status(200).json(fullPost);
   } catch (error) {
     console.error(error);
     next(error);
