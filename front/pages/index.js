@@ -5,6 +5,7 @@ import AppLayout from '../components/AppLayout';
 import wrapper from '../store/configureStore';
 import { END } from 'redux-saga';
 import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
+import axios from 'axios';
 
 const Skill = styled.h2`
   margin: 0 auto;

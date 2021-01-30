@@ -1,6 +1,7 @@
 import produce from 'immer';
 
 export const initialState = {
+  singlePost: null,
   mainPosts: [],
   imagePaths: [],
   hasMorePosts: true,
@@ -16,11 +17,19 @@ export const initialState = {
   loadPostsLoading: false,
   loadPostsDone: false,
   loadPostsError: null,
+
+  loadPostLoading: false,
+  loadPostDone: false,
+  loadPostError: null,
 };
 
 export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
 export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
 export const LOAD_POSTS_FAILURE = 'LOAD_POSTS_FAILURE';
+
+export const LOAD_POST_REQUEST = 'LOAD_POST_REQUEST';
+export const LOAD_POST_SUCCESS = 'LOAD_POST_SUCCESS';
+export const LOAD_POST_FAILURE = 'LOAD_POST_FAILURE';
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
@@ -45,17 +54,17 @@ export const addComment = (data) => ({
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
-      case LOAD_POSTS_REQUEST:
+      case LOAD_POST_REQUEST:
         draft.loadPostsLoading = true;
         draft.loadPostsDone = false;
         draft.loadPostsError = null;
         break;
-      case LOAD_POSTS_SUCCESS:
-        draft.mainPosts = draft.mainPosts.concat(action.data);
+      case LOAD_POST_SUCCESS:
+        draft.singlePost = action.data;
         draft.loadPostsLoading = false;
         draft.loadPostsDone = true;
         break;
-      case LOAD_POSTS_FAILURE:
+      case LOAD_POST_FAILURE:
         draft.loadPostsLoading = false;
         draft.loadPostsError = action.error;
         break;

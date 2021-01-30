@@ -7,6 +7,9 @@ import {
   LOAD_POSTS_REQUEST,
   LOAD_POSTS_SUCCESS,
   LOAD_POSTS_FAILURE,
+  LOAD_POST_REQUEST,
+  LOAD_POST_SUCCESS,
+  LOAD_POST_FAILURE,
   ADD_COMMENT_REQUEST,
   ADD_COMMENT_FAILURE,
   ADD_COMMENT_SUCCESS,
@@ -50,6 +53,25 @@ function* loadPosts(action) {
   }
 }
 
+function loadPostAPI(data) {
+  return axios.get(`/post/${data}`);
+}
+function* loadPost(action) {
+  try {
+    const result = yield call(loadPostAPI, action.data);
+    yield put({
+      type: LOAD_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (error) {
+    console.error(error);
+    yield put({
+      type: LOAD_POST_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
 function addCommentAPI(data) {
   return axios.post(`/post/${data.postId}/comment`, data); //POST /post/1/comment
 }
@@ -77,10 +99,18 @@ function* watchLoadPosts() {
   yield takeLatest(LOAD_POSTS_REQUEST, loadPosts);
 }
 
+function* watchLoadPost() {
+  yield takeLatest(LOAD_POST_REQUEST, loadPost);
+}
+
 function* watchAddComment() {
   yield takeLatest(ADD_COMMENT_REQUEST, addComment);
 }
-
 export default function* postSaga() {
-  yield all([fork(watchAddComment), fork(watchLoadPosts), fork(watchAddPost)]);
+  yield all([
+    fork(watchAddComment),
+    fork(watchLoadPosts),
+    fork(watchLoadPost),
+    fork(watchAddPost),
+  ]);
 }
