@@ -3,23 +3,22 @@ import PropTypes from 'prop-types';
 import Head from 'next/head';
 import 'antd/dist/antd.css';
 import '../assets/css/ImageHeader.css';
-import withReduxSaga from 'next-redux-saga';
 import wrapper from '../store/configureStore';
 
 const App = ({ Component }) => {
-    return (
-        <>
-            <Head>
-                <meta charSet="utf-8" />
-                <title>Blog</title>
-            </Head>
-            <Component />
-        </>
-    );
+  return (
+    <>
+      <Head>
+        <meta charSet="utf-8" />
+        <title>Blog</title>
+      </Head>
+      <Component />
+    </>
+  );
 };
 
 App.propTypes = {
-    Component: PropTypes.elementType.isRequired,
+  Component: PropTypes.elementType.isRequired,
 };
 
-export default wrapper.withRedux(withReduxSaga(App));
+export default wrapper.withRedux(App);
