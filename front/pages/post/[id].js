@@ -7,7 +7,6 @@ import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
 import { LOAD_POST_REQUEST } from '../../reducers/post';
 import { END } from 'redux-saga';
 import PostCardDetail from '../../components/PostCardDetail';
-import PostCard from '../../components/PostCard';
 
 const Post = () => {
   const router = useRouter();
@@ -16,7 +15,7 @@ const Post = () => {
 
   return (
     <AppLayout>
-      <PostCard post={singlePost} />
+      <PostCardDetail post={singlePost} />
     </AppLayout>
   );
 };

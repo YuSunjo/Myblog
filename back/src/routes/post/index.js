@@ -74,6 +74,14 @@ router.get('/:postId', async (req, res, next) => {
     }
     const fullPost = await Post.findOne({
       where: { id: post.id },
+      include: [
+        {
+          model: Image,
+        },
+        {
+          model: Comment,
+        },
+      ],
       // include: [
       //   {
       //     model: User,

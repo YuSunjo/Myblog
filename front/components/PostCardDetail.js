@@ -7,6 +7,7 @@ import {
   HeartTwoTone,
 } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
+import CommentForm from './CommentForm';
 
 const PostCardDetail = ({ post }) => {
   const id = useSelector((state) => {
@@ -44,7 +45,7 @@ const PostCardDetail = ({ post }) => {
             key="more"
             content={
               <Button.Group>
-                {id && post.User.id === id ? (
+                {id && post.id === id ? (
                   <>
                     <Button>수정</Button>
                     <Button type="danger">삭제</Button>
