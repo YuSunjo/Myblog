@@ -13,7 +13,29 @@ import {
   ADD_COMMENT_REQUEST,
   ADD_COMMENT_FAILURE,
   ADD_COMMENT_SUCCESS,
+  UPLOAD_IMAGES_REQUEST,
+  UPLOAD_IMAGES_SUCCESS,
+  UPLOAD_IMAGES_FAILURE,
 } from '../reducers/post';
+
+function uploadImagesAPI(data) {
+  return axios.post('/post/images', data);
+}
+function* uploadImages(action) {
+  try {
+    const result = yield call(uploadImagesAPI, action.data);
+    yield put({
+      type: UPLOAD_IMAGES_SUCCESS,
+      data: result.data,
+    });
+  } catch (error) {
+    console.error(error);
+    yield put({
+      type: UPLOAD_IMAGES_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
 
 function addPostAPI(data) {
   return axios.post('/post', data);
@@ -106,11 +128,17 @@ function* watchLoadPost() {
 function* watchAddComment() {
   yield takeLatest(ADD_COMMENT_REQUEST, addComment);
 }
+
+function* watchUploadImages() {
+  yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
+}
+
 export default function* postSaga() {
   yield all([
     fork(watchAddComment),
     fork(watchLoadPosts),
     fork(watchLoadPost),
     fork(watchAddPost),
+    fork(watchUploadImages),
   ]);
 }

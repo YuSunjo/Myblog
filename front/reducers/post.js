@@ -21,7 +21,17 @@ export const initialState = {
   loadPostLoading: false,
   loadPostDone: false,
   loadPostError: null,
+
+  uploadImagesLoading: false,
+  uploadImagesDone: false,
+  uploadImagesError: null,
 };
+
+export const REMOVE_IMAGE = 'REMOVE_IMAGE';
+
+export const UPLOAD_IMAGES_REQUEST = 'UPLOAD_IMAGES_REQUEST';
+export const UPLOAD_IMAGES_SUCCESS = 'UPLOAD_IMAGES_SUCCESS';
+export const UPLOAD_IMAGES_FAILURE = 'UPLOAD_IMAGES_FAILURE';
 
 export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
 export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
@@ -54,19 +64,50 @@ export const addComment = (data) => ({
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
-      case LOAD_POST_REQUEST:
+      case REMOVE_IMAGE:
+        draft.imagePaths = draft.imagePaths.filter((v, i) => i !== action.data);
+        break;
+      case UPLOAD_IMAGES_REQUEST:
+        draft.uploadImagesLoading = true;
+        draft.uploadImagesDone = false;
+        draft.uploadImagesError = null;
+        break;
+      case UPLOAD_IMAGES_SUCCESS:
+        draft.imagePaths = action.data;
+        draft.uploadImagesLoading = false;
+        draft.uploadImagesDone = true;
+        break;
+      case UPLOAD_IMAGES_FAILURE:
+        draft.uploadImagesLoading = false;
+        draft.uploadImagesError = action.error;
+        break;
+      case LOAD_POSTS_REQUEST:
+        draft.loadPostsLoading = true;
+        draft.loadPostsDone = false;
+        draft.loadPostsError = null;
+        break;
+      case LOAD_POSTS_SUCCESS:
+        draft.mainPosts = draft.mainPosts.concat(action.data);
+        draft.loadPostsLoading = false;
+        draft.loadPostsDone = true;
+        break;
+      case LOAD_POSTS_FAILURE:
+        draft.loadPostsLoading = false;
+        draft.loadPostsError = action.error;
+        break;
+      case LOAD_POSTS_REQUEST:
         draft.loadPostsLoading = true;
         draft.loadPostsDone = false;
         draft.loadPostsError = null;
         break;
       case LOAD_POST_SUCCESS:
         draft.singlePost = action.data;
-        draft.loadPostsLoading = false;
-        draft.loadPostsDone = true;
+        draft.loadPostLoading = false;
+        draft.loadPostDone = true;
         break;
       case LOAD_POST_FAILURE:
-        draft.loadPostsLoading = false;
-        draft.loadPostsError = action.error;
+        draft.loadPostLoading = false;
+        draft.loadPostError = action.error;
         break;
       case ADD_POST_REQUEST:
         draft.addPostLoading = true;
@@ -77,6 +118,7 @@ const reducer = (state = initialState, action) => {
         draft.mainPosts.unshift(action.data);
         draft.addPostLoading = false;
         draft.addPostDone = true;
+        draft.imagePaths = [];
         break;
       case ADD_POST_FAILURE:
         draft.addPostLoading = false;
