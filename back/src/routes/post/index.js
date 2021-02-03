@@ -8,6 +8,7 @@ import Comment from '@src/models/comment';
 import { isLoggedIn } from '@src/middlewares/user';
 import multer from 'multer';
 import path from 'path';
+import User from '@src/models/user';
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -60,7 +61,7 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
 });
 
 router.post('/images', isLoggedIn, upload.array('image'), async (req, res) => {
-  console.log(req.files);
+  // console.log(req.files);
   res.json(req.files.map((v) => v.filename));
 });
 
@@ -76,53 +77,27 @@ router.get('/:postId', async (req, res, next) => {
       where: { id: post.id },
       include: [
         {
+          model: User,
+          attributes: ['id', 'nickname'],
+        },
+        {
+          model: User,
+          as: 'Likers',
+          attributes: ['id', 'nickname'],
+        },
+        {
           model: Image,
         },
         {
           model: Comment,
+          include: [
+            {
+              model: User,
+              attributes: ['id', 'nickname'],
+            },
+          ],
         },
       ],
-      // include: [
-      //   {
-      //     model: User,
-      //     attributes: ['id', 'nickname'],
-      //   },
-      //   {
-      //     model: User,
-      //     as: 'Likers',
-      //     attributes: ['id', 'nickname'],
-      //   },
-      //   {
-      //     model: Image,
-      //   },
-      //   {
-      //     model: Comment,
-      //     include: [
-      //       {
-      //         model: User,
-      //         attributes: ['id', 'nickname'],
-      //       },
-      //     ],
-      //   },
-      // ],
-    });
-    res.status(200).json(fullPost);
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-});
-
-router.get('/:postId', async (req, res, next) => {
-  try {
-    const post = await Post.findOne({
-      where: { id: req.params.postId },
-    });
-    if (!post) {
-      return res.status(404).send('존재하지 않는 게시글 입니다.');
-    }
-    const fullPost = await Post.findOne({
-      where: { id: post.id }, //include 나중에 넣어야할듯?
     });
     res.status(200).json(fullPost);
   } catch (error) {

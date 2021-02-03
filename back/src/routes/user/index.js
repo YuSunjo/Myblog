@@ -17,7 +17,7 @@ router.post('/login', isNotLoggedIn, loginController);
 router.post('/logout', isLoggedIn, logoutController);
 
 router.get('/', async (req, res, next) => {
-  console.log(req.headers);
+  // console.log(req.headers);
   try {
     if (req.user) {
       const user = await User.findOne({

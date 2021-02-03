@@ -6,12 +6,13 @@ import {
   EllipsisOutlined,
   HeartTwoTone,
 } from '@ant-design/icons';
+import Avatar from 'antd/lib/avatar/avatar';
 import { useSelector, useDispatch } from 'react-redux';
 import CommentForm from './CommentForm';
 
 const PostCardDetail = ({ post }) => {
   const id = useSelector((state) => {
-    return state.user;
+    return state.user.me?.id;
   });
   const [liked, setLiked] = useState(false);
   const [commentFormOpened, setCommentFormOpened] = useState(false);
