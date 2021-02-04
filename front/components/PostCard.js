@@ -3,6 +3,7 @@ import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { HeartTwoTone, HeartOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
+import Link from 'next/link';
 
 const PostCard = ({ post }) => {
   const [liked, setLiked] = useState(false);
@@ -23,7 +24,9 @@ const PostCard = ({ post }) => {
         title={post.title}
         extra={[
           <div>
-            <a href="#">More</a>
+            <Link href={`/post/${post.id}`}>
+              <a>More</a>
+            </Link>
           </div>,
           liked ? (
             <HeartTwoTone

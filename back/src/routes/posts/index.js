@@ -4,6 +4,7 @@ const router = express.Router();
 import Post from '@src/models/post';
 import Image from '@src/models/image';
 import User from '@src/models/user';
+import Comment from '@src/models/comment';
 
 // router.get('/', (req, res) => {
 //   res.send('post page');
@@ -18,10 +19,25 @@ router.get('/', async (req, res, next) => {
       order: [['createdAt', 'DESC']],
       include: [
         {
+          model: User,
+          attributes: ['id', 'nickname'],
+        },
+        {
           model: Image,
         },
         {
+          model: Comment,
+          include: [
+            {
+              model: User,
+              attributes: ['id', 'nickname'],
+            },
+          ],
+        },
+        {
           model: User,
+          as: 'Likers',
+          attributes: ['id'],
         },
       ],
     });
